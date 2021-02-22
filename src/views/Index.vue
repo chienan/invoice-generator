@@ -4,7 +4,10 @@
       <h3>invoice generator</h3>
     </div>
     <div class="invoice-title">Invoice 2021</div>
-    <div class="client-name">INVOICE TO</div>
+    <div class="client-name">
+      <div class="client-name-title">INVOICE TO</div>
+      <div class="client-name-form"></div>
+    </div>
     <div class="client-details">CLIENT DETAILS</div>
   </div>
 </template>
