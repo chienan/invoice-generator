@@ -13,13 +13,16 @@ export default {
 </script>
 
 <style>
-* CSS reset * body {
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;800&display=swap");
+
+/* CSS reset */
+body {
   margin: 0;
   padding: 0;
 }
 * {
   box-sizing: border-box;
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 h1,
 h2,
