@@ -110,14 +110,17 @@
       <button class="add-product" @click.stop.prevent="addItem(index)">
         <div class="btn-add-product">＋</div>
       </button>
+
+      <div class="add-product-notice">Add line</div>
       <table class="product-container">
         <thead>
           <tr class="items-section">
             <td class="item item-description">DESCRIPTION</td>
-            <td class="item item-quantity">QUANTITY</td>
+            <td class="item item-quantity">QTY.</td>
             <td class="item item-price">PRICE</td>
-            <td class="item item-discount">DISCOUNT</td>
+            <td class="item item-discount">DISC.</td>
             <td class="item item-tax">TAX</td>
+            <td class="item item-total">TOTAL</td>
             <td class="item item-remove"></td>
           </tr>
         </thead>
@@ -146,23 +149,46 @@
               <label class="sr-only" for="tax">itemTax</label>
               <b-form-input id="tax" placeholder="$8" v-model="items.tax"></b-form-input>
             </td>
+            <td class="item item-total">
+              <label class="sr-only" for="tax">itemTotal</label>
+              <b-form-input id="tax" placeholder="$8" v-model="items.total"></b-form-input>
+            </td>
             <td class="item item-remove">
               <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
             </td>
           </tr>
-          <tr class="item-total">
-            <th>$594</th>
-          </tr>
         </tbody>
+        <tfoot>
+          <tr class="items-section final-section">
+            <td class="final-title">OTHER DISCOUNT</td>
+            <td class="final-number line">$-15</td>
+          </tr>
+          <tr class="items-section final-section">
+            <td class="final-title">TAX</td>
+            <td class="final-number">$594</td>
+          </tr>
+          <tr class="items-section final-section">
+            <td class="final-title final-total">TOTAL</td>
+            <td class="final-number total-container">$594</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
 
     <!-- client notes -->
     <div class="client-notes section">
-      <div class="client-notes-title">CLIENT-NOTES</div>
+      <div class="client-notes-title">NOTES FOR CLIENT</div>
       <div class="client-notes-show">
-        <div class="client-notes-icon"></div>
+        <button class="client-notes-icon"></button>
       </div>
+      <textarea
+        class="client-notes-textarea"
+        name="client-notes"
+        id="client-notes"
+        cols="30"
+        rows="10"
+        placeholder="such as 'thank you for your business'"
+      ></textarea>
     </div>
 
     <div class="save-section">
@@ -363,6 +389,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+  /* padding-bottom: 50px; */
 }
 
 .product-section-title {
@@ -373,24 +400,33 @@ export default {
   display: flex;
 }
 
+.final-section {
+  min-height: 50px;
+  align-items: center;
+}
+
 .item-description {
   width: 35%;
 }
 
 .item-quantity {
-  width: 15%;
+  width: 10%;
 }
 
 .item-price {
-  width: 20%;
+  width: 15%;
 }
 
 .item-discount {
-  width: 15%;
+  width: 10%;
 }
 
 .item-tax {
-  width: 15%;
+  width: 10%;
+}
+
+.item-total {
+  width: 20%;
 }
 
 .item-remove {
@@ -400,9 +436,68 @@ export default {
   justify-content: center;
 }
 
+.final-title {
+  width: 75%;
+  text-align: end;
+  margin-right: 15px;
+  /* margin-right: 15%; */
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.final-number {
+  position: relative;
+  width: 25%;
+}
+
+.final-total {
+  color: #ffffff;
+}
+
+.line::after {
+  position: absolute;
+  content: "";
+  background-color: #dcdcdc;
+  height: 1px;
+  width: 190%;
+  right: 25%;
+  top: 165%;
+}
+
+.total-container::after {
+  position: absolute;
+  content: "";
+  background-color: #4a4aff;
+  border-radius: 5px;
+  height: 200%;
+  width: 190%;
+  right: 25%;
+  bottom: -50%;
+  z-index: -1;
+}
+
+.total-container:hover::after {
+  background-color: #9bd2ed;
+}
+
+/* .total-container::after::hover {
+  position: absolute;
+  content: "";
+  background-color: black;
+  border-radius: 5px;
+  height: 200%;
+  width: 190%;
+  right: 25%;
+  bottom: -50%;
+  z-index: -1;
+} */
+
 .btn-item-remove {
   font-size: 25px;
   font-weight: 300;
+}
+
+.btn-item-remove:hover {
+  color: #4a4aff;
 }
 
 .product-section-amount {
@@ -411,17 +506,30 @@ export default {
 
 .add-product {
   position: absolute;
-  border: 1px solid #4a4aff;
+  /* border: 1px solid #4a4aff; */
   background: #4a4aff;
   height: 38px;
   width: 38px;
-  right: 15px;
-  bottom: 13px;
+  /* right: 15px; */
+  bottom: 120px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
+}
+
+.add-product:hover {
+  /* background: #88c8e7; */
+  background: #9bd2ed;
+}
+
+.add-product-notice {
+  position: absolute;
+  bottom: 130px;
+  left: 50px;
+  font-weight: normal;
+  color: #6a6a6a;
 }
 
 .btn-add-product {
@@ -461,13 +569,21 @@ export default {
   border-color: #4a4aff transparent transparent transparent;
 }
 
+.client-notes-textarea {
+  width: 100%;
+  height: 10%;
+  max-height: 100px;
+  /* min-height: 20px; */
+  border: 1px solid #dcdcdc;
+  padding: 3%;
+}
+
 .save-section {
   display: flex;
   flex-direction: row-reverse;
 }
 
 .save-btn {
-  border: 1px solid #4a4aff;
   background: #4a4aff;
   height: 38px;
   width: 38px;
@@ -479,6 +595,10 @@ export default {
   justify-content: center;
   align-items: center;
   box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
+}
+
+.save-btn:hover {
+  background: #9bd2ed;
 }
 
 .save-icon {
