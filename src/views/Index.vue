@@ -4,6 +4,7 @@
       <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
       <div class="main-title">TOSO INVOICE GENERATOR</div>
     </div>
+
     <div class="invoice-title section">
       <div class="invoice-title-title title">INVOICE TITLE</div>
       <div class="invoice-title-form">
@@ -14,7 +15,30 @@
         </div>
       </div>
     </div>
+    <!--invoice from-->
     <div class="client-name section">
+      <div class="client-details-container">
+        <div class="client-details-title">INVOICE from</div>
+        <div class="client-details-edit">EDIT</div>
+      </div>
+
+      <div class="client-details-content">
+        <div class="client-details-name">
+          <input type="text" class="input-from-name" placeholder="HAYABUSA corp." />
+        </div>
+        <div class="client-details-address">
+          <input type="text" class="input-from-address" placeholder="台北市內湖區公道路5號" />
+        </div>
+
+        <div class="client-details-phone">
+          <input type="tel" class="input-from-phone" placeholder="+886 897832490" />
+        </div>
+        <div class="client-details-email">
+          <input type="email" class="input-from-email" placeholder="hayabusa@example.com" />
+        </div>
+      </div>
+    </div>
+    <!-- <div class="client-name section">
       <div class="client-name-title title">INVOICE TO</div>
       <div class="client-name-form">
         <div class="form-section">
@@ -25,22 +49,35 @@
         </div>
         <div class="add-new-section">＋ NEW</div>
       </div>
-    </div>
+    </div>-->
+
+    <!--invoice to-->
     <div class="client-details section">
       <div class="client-details-container">
-        <div class="client-details-title">CLIENT DETAILS</div>
+        <div class="client-details-title">INVOICE to</div>
         <div class="client-details-edit">EDIT</div>
       </div>
 
       <div class="client-details-content">
-        <div class="client-details-name">Radius Lab</div>
-        <div class="client-details-address">新竹市大學路300號5樓</div>
+        <div class="client-details-name">
+          <input type="text" class="input-to-name" placeholder="Radius Lab" />
+        </div>
+        <div class="client-details-address">
+          <input type="text" class="input-to-address" placeholder="新竹市大學路300號5樓" />
+        </div>
 
-        <div class="client-details-phone">+886 847374958</div>
-        <div class="client-details-email">Anenome@example.com</div>
+        <div class="client-details-phone">
+          <input type="tel" class="input-to-phone" placeholder="+886 847374958" />
+        </div>
+        <div class="client-details-email">
+          <input type="email" class="input-to-email" placeholder="Anenome@example.com" />
+        </div>
       </div>
     </div>
+
+    <!-- invoice-info -->
     <div class="invoice-info section">
+      <!-- invoice-number -->
       <div class="invoice-number">
         <div class="invoice-number-title title">INVOICE NO.</div>
         <div class="invoie-number-form">
@@ -50,6 +87,7 @@
         </div>
       </div>
 
+      <!--  invoice-date  -->
       <div class="invoice-date">
         <div class="invoice-date-title title">INVOICE DATE</div>
         <div class="invoice-date-form">
@@ -62,13 +100,64 @@
       </div>
     </div>
 
+    <!--  product section  -->
     <div class="product-section section">
-      <div class="product-section-title">PRODUCT</div>
-      <div class="product-section-amount">(0)</div>
-      <div class="add-product">
-        <div class="btn-add-product">＋</div>
+      <div class="product-section-title">
+        PRODUCT
+        <div class="product-section-amount">(0)</div>
       </div>
+
+      <button class="add-product" @click.stop.prevent="addItem(index)">
+        <div class="btn-add-product">＋</div>
+      </button>
+      <table class="product-container">
+        <thead>
+          <tr class="items-section">
+            <td class="item item-description">DESCRIPTION</td>
+            <td class="item item-quantity">QUANTITY</td>
+            <td class="item item-price">PRICE</td>
+            <td class="item item-discount">DISCOUNT</td>
+            <td class="item item-tax">TAX</td>
+            <td class="item item-remove"></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="items-section" v-for="(items, index) in items" :key="index">
+            <td class="item item-description">
+              <label class="sr-only" for="description">itemDescription</label>
+              <b-form-input id="description" placeholder="chocolate" v-model="items.description"></b-form-input>
+            </td>
+
+            <td class="item item-quantity">
+              <label class="sr-only" for="quantity">itemQuantity</label>
+              <b-form-input id="quantity" placeholder="3psc" v-model="items.quantity"></b-form-input>
+            </td>
+
+            <td class="item item-price">
+              <label class="sr-only" for="price">itemPrice</label>
+              <b-form-input id="price" placeholder="$200" v-model="items.price"></b-form-input>
+            </td>
+
+            <td class="item item-discount">
+              <label class="sr-only" for="discount">itemDiscount</label>
+              <b-form-input id="discount" placeholder="-15" v-model="items.discount"></b-form-input>
+            </td>
+            <td class="item item-tax">
+              <label class="sr-only" for="tax">itemTax</label>
+              <b-form-input id="tax" placeholder="$8" v-model="items.tax"></b-form-input>
+            </td>
+            <td class="item item-remove">
+              <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
+            </td>
+          </tr>
+          <tr class="item-total">
+            <th>$594</th>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <!-- client notes -->
     <div class="client-notes section">
       <div class="client-notes-title">CLIENT-NOTES</div>
       <div class="client-notes-show">
@@ -89,6 +178,19 @@
 import * as html2pdf from "html2pdf.js";
 
 export default {
+  data() {
+    return {
+      items: [
+        {
+          description: "",
+          quantity: "",
+          price: "",
+          discount: "",
+          tax: ""
+        }
+      ]
+    };
+  },
   methods: {
     download() {
       const element = document.querySelector("#invoice");
@@ -103,6 +205,20 @@ export default {
         .from(element)
         .set(opt)
         .save();
+    },
+
+    addItem(index) {
+      this.items.splice(index + 1, 0, {
+        description: "",
+        quantity: "",
+        price: "",
+        discount: "",
+        tax: ""
+      });
+    },
+
+    removeItem(index) {
+      this.items.splice(index, 1);
     }
 
     // download(e) {
@@ -192,6 +308,18 @@ export default {
   width: 80%;
 }
 
+.input-to-name,
+.input-to-address,
+.input-to-phone,
+.input-to-email,
+.input-from-name,
+.input-from-address,
+.input-from-phone,
+.input-from-email {
+  border: none;
+  width: 75%;
+}
+
 .add-new-section,
 .client-details-edit {
   font-size: 5px;
@@ -233,7 +361,48 @@ export default {
 
 .product-section {
   display: flex;
+  flex-direction: column;
   position: relative;
+}
+
+.product-section-title {
+  display: flex;
+}
+
+.items-section {
+  display: flex;
+}
+
+.item-description {
+  width: 35%;
+}
+
+.item-quantity {
+  width: 15%;
+}
+
+.item-price {
+  width: 20%;
+}
+
+.item-discount {
+  width: 15%;
+}
+
+.item-tax {
+  width: 15%;
+}
+
+.item-remove {
+  width: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-item-remove {
+  font-size: 25px;
+  font-weight: 300;
 }
 
 .product-section-amount {
