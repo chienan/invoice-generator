@@ -104,7 +104,7 @@
     <div class="product-section section">
       <div class="product-section-title">
         PRODUCT
-        <div class="product-section-amount">(0)</div>
+        <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
       </div>
 
       <button class="add-product" @click.stop.prevent="addItem(index)">
@@ -118,8 +118,8 @@
             <td class="item item-description">DESCRIPTION</td>
             <td class="item item-quantity">QTY.</td>
             <td class="item item-price">PRICE</td>
-            <td class="item item-discount">DISC.</td>
-            <td class="item item-tax">TAX</td>
+            <td class="item item-discount">DISC.%</td>
+            <td class="item item-tax">TAX%</td>
             <td class="item item-total">TOTAL</td>
             <td class="item item-remove"></td>
           </tr>
@@ -133,25 +133,45 @@
 
             <td class="item item-quantity">
               <label class="sr-only" for="quantity">itemQuantity</label>
-              <b-form-input id="quantity" placeholder="3psc" v-model="items.quantity"></b-form-input>
+              <b-form-input
+                id="quantity"
+                placeholder="3"
+                v-model="items.quantity"
+                v-on:change="itemTotal(index)"
+              ></b-form-input>
             </td>
 
             <td class="item item-price">
               <label class="sr-only" for="price">itemPrice</label>
-              <b-form-input id="price" placeholder="$200" v-model="items.price"></b-form-input>
+              <b-form-input
+                id="price"
+                placeholder="200"
+                v-model="items.price"
+                v-on:change="itemTotal(index)"
+              ></b-form-input>
             </td>
 
             <td class="item item-discount">
               <label class="sr-only" for="discount">itemDiscount</label>
-              <b-form-input id="discount" placeholder="-15" v-model="items.discount"></b-form-input>
+              <b-form-input
+                id="discount"
+                placeholder="5"
+                v-model="items.discount"
+                v-on:change="itemTotal(index)"
+              ></b-form-input>
             </td>
             <td class="item item-tax">
               <label class="sr-only" for="tax">itemTax</label>
-              <b-form-input id="tax" placeholder="$8" v-model="items.tax"></b-form-input>
+              <b-form-input
+                id="tax"
+                placeholder="3"
+                v-model="items.tax"
+                v-on:change="itemTotal(index)"
+              ></b-form-input>
             </td>
             <td class="item item-total">
               <label class="sr-only" for="tax">itemTotal</label>
-              <b-form-input id="tax" placeholder="$8" v-model="items.total"></b-form-input>
+              <b-form-input id="tax" placeholder="8" :value="items.total | money"></b-form-input>
             </td>
             <td class="item item-remove">
               <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
@@ -160,16 +180,16 @@
         </tbody>
         <tfoot>
           <tr class="items-section final-section">
-            <td class="final-title">OTHER DISCOUNT</td>
-            <td class="final-number line">$-15</td>
+            <td class="final-title">DISCOUNT</td>
+            <td class="final-number line">{{itemsDiscountTotal | money}}</td>
           </tr>
           <tr class="items-section final-section">
             <td class="final-title">TAX</td>
-            <td class="final-number">$594</td>
+            <td class="final-number">{{itemsTaxTotal | money}}</td>
           </tr>
           <tr class="items-section final-section">
             <td class="final-title final-total">TOTAL</td>
-            <td class="final-number total-container">$594</td>
+            <td class="final-number total-container">{{itemsTotal | money}}</td>
           </tr>
         </tfoot>
       </table>
@@ -178,9 +198,9 @@
     <!-- client notes -->
     <div class="client-notes section">
       <div class="client-notes-title">NOTES FOR CLIENT</div>
-      <div class="client-notes-show">
+      <!-- <div class="client-notes-show">
         <button class="client-notes-icon"></button>
-      </div>
+      </div>-->
       <textarea
         class="client-notes-textarea"
         name="client-notes"
@@ -206,18 +226,23 @@ import * as html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
+      index: 1,
       items: [
         {
           description: "",
           quantity: "",
           price: "",
           discount: "",
-          tax: ""
+          discount_amount: "",
+          tax: "",
+          tax_amount: "",
+          total: ""
         }
       ]
     };
   },
   methods: {
+    // downlad invoice as pdf
     download() {
       const element = document.querySelector("#invoice");
       const opt = {
@@ -233,18 +258,68 @@ export default {
         .save();
     },
 
-    addItem(index) {
-      this.items.splice(index + 1, 0, {
+    // add product
+    addItem() {
+      this.items.push({
         description: "",
         quantity: "",
         price: "",
         discount: "",
-        tax: ""
+        discount_amount: "",
+        tax: "",
+        tax_amount: "",
+        total: ""
       });
+      this.index += 1;
     },
 
+    //remove product
     removeItem(index) {
       this.items.splice(index, 1);
+      this.index -= 1;
+    },
+
+    //calculate total
+    itemTotal(index) {
+      let discountTotal;
+      let taxTotal;
+      let taxDisTotal;
+
+      //basic items total
+      const calculatedTotal =
+        this.items[index].quantity * this.items[index].price;
+      this.items[index].total = calculatedTotal;
+
+      // if discount applied
+      if (this.items[index].discount) {
+        discountTotal = calculatedTotal * (this.items[index].discount / 100);
+        this.items[index].discount_amount = discountTotal;
+        this.items[index].total = calculatedTotal - discountTotal;
+      } else if (
+        this.items[index].discount === 0 ||
+        this.items[index].discount === ""
+      ) {
+        this.items[index].discount_amount = 0;
+      }
+
+      //if tax applied
+      if (this.items[index].tax) {
+        taxTotal = calculatedTotal * (this.items[index].tax / 100);
+        this.items[index].tax_amount = taxTotal;
+        this.items[index].total = calculatedTotal + taxTotal;
+      } else if (this.items[index].tax === 0 || this.items[index].tax === "") {
+        this.items[index].tax_amount = 0;
+      }
+
+      //if tax & discount applied
+
+      if (this.items[index].tax && this.items[index].discount) {
+        taxDisTotal =
+          (calculatedTotal - discountTotal) * (this.items[index].tax / 100);
+        this.items[index].discount_amount = discountTotal;
+        this.items[index].tax_amount = taxDisTotal;
+        this.items[index].total = calculatedTotal - discountTotal + taxDisTotal;
+      }
     }
 
     // download(e) {
@@ -264,6 +339,21 @@ export default {
 
     //   doc.save("output.pdf");
     // }
+  },
+  computed: {
+    indexLength() {
+      return this.index;
+    },
+    //update final total
+    itemsTotal() {
+      return this.items.reduce((acc, item) => acc + item.total, 0);
+    },
+    itemsDiscountTotal() {
+      return this.items.reduce((acc, item) => acc + item.discount_amount, 0);
+    },
+    itemsTaxTotal() {
+      return this.items.reduce((acc, item) => acc + item.tax_amount, 0);
+    }
   }
 };
 </script>
@@ -377,6 +467,10 @@ export default {
   font-weight: normal;
 } */
 
+.client-notes-title {
+  margin-bottom: 10px;
+}
+
 .invoice-number {
   width: 47%;
 }
@@ -394,6 +488,11 @@ export default {
 
 .product-section-title {
   display: flex;
+  margin-bottom: 10px;
+}
+
+.product-section-amount {
+  margin-left: 5px;
 }
 
 .items-section {
@@ -548,7 +647,7 @@ export default {
 }
 
 .client-notes-show {
-  position: absolute;
+  /* position: absolute; */
   border: 2px solid #4a4aff;
   color: #4a4aff;
   border-radius: 50%;
@@ -558,16 +657,17 @@ export default {
   justify-content: center;
   align-items: center;
   right: 26px;
-  bottom: 20px;
+  top: 0px;
+  /* bottom: 20px; */
 }
-
+/* 
 .client-notes-icon {
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 5px 4px 0 4px;
   border-color: #4a4aff transparent transparent transparent;
-}
+} */
 
 .client-notes-textarea {
   width: 100%;
