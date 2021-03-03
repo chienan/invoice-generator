@@ -1,44 +1,65 @@
 <template>
-  <form class="container" id="invoice" ref="content" @submit.stop.prevent="download">
-    <div class="nav">
-      <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
-      <div class="main-title">TOSO INVOICE GENERATOR</div>
-    </div>
-
-    <div class="invoice-title section">
-      <div class="invoice-title-title title">INVOICE TITLE</div>
-      <div class="invoice-title-form">
-        <div class="form-section">
-          <label class="sr-only" for="title">InvoiceTitle</label>
-
-          <b-form-input id="title" placeholder="InvoiceTitle"></b-form-input>
-        </div>
-      </div>
-    </div>
-    <!--invoice from-->
-    <div class="client-name section">
-      <div class="client-details-container">
-        <div class="client-details-title">INVOICE from</div>
-        <div class="client-details-edit">EDIT</div>
+  <div class="container">
+    <form class="invoice" id="invoice" ref="content" @submit.stop.prevent="download">
+      <div class="nav">
+        <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
+        <div class="main-title">TOSO INVOICE GENERATOR</div>
       </div>
 
-      <div class="client-details-content">
-        <div class="client-details-name">
-          <input type="text" class="input-from-name" placeholder="HAYABUSA corp." />
-        </div>
-        <div class="client-details-address">
-          <input type="text" class="input-from-address" placeholder="台北市內湖區公道路5號" />
-        </div>
+      <div class="invoice-title section">
+        <div class="invoice-title-title title">INVOICE TITLE</div>
+        <div class="invoice-title-form">
+          <div class="form-section">
+            <label class="sr-only" for="title">InvoiceTitle</label>
 
-        <div class="client-details-phone">
-          <input type="tel" class="input-from-phone" placeholder="+886 897832490" />
-        </div>
-        <div class="client-details-email">
-          <input type="email" class="input-from-email" placeholder="hayabusa@example.com" />
+            <b-form-input id="title" v-model="invoice_title" placeholder="InvoiceTitle"></b-form-input>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- <div class="client-name section">
+      <!--invoice from-->
+      <div class="client-name section">
+        <div class="client-details-container">
+          <div class="client-details-title">INVOICE from</div>
+          <div class="client-details-edit">EDIT</div>
+        </div>
+
+        <div class="client-details-content">
+          <div class="client-details-name">
+            <input
+              type="text"
+              class="input-from-name"
+              placeholder="HAYABUSA corp."
+              v-model="from_name"
+            />
+          </div>
+          <div class="client-details-address">
+            <input
+              type="text"
+              class="input-from-address"
+              placeholder="台北市內湖區公道路5號"
+              v-model="from_address"
+            />
+          </div>
+
+          <div class="client-details-phone">
+            <input
+              type="tel"
+              class="input-from-phone"
+              placeholder="+886 897832490"
+              v-model="from_tel"
+            />
+          </div>
+          <div class="client-details-email">
+            <input
+              type="email"
+              class="input-from-email"
+              placeholder="hayabusa@example.com"
+              v-model="from_email"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- <div class="client-name section">
       <div class="client-name-title title">INVOICE TO</div>
       <div class="client-name-form">
         <div class="form-section">
@@ -49,174 +70,267 @@
         </div>
         <div class="add-new-section">＋ NEW</div>
       </div>
-    </div>-->
+      </div>-->
 
-    <!--invoice to-->
-    <div class="client-details section">
-      <div class="client-details-container">
-        <div class="client-details-title">INVOICE to</div>
-        <div class="client-details-edit">EDIT</div>
-      </div>
-
-      <div class="client-details-content">
-        <div class="client-details-name">
-          <input type="text" class="input-to-name" placeholder="Radius Lab" />
-        </div>
-        <div class="client-details-address">
-          <input type="text" class="input-to-address" placeholder="新竹市大學路300號5樓" />
+      <!--invoice to-->
+      <div class="client-details section">
+        <div class="client-details-container">
+          <div class="client-details-title">INVOICE to</div>
+          <div class="client-details-edit">EDIT</div>
         </div>
 
-        <div class="client-details-phone">
-          <input type="tel" class="input-to-phone" placeholder="+886 847374958" />
-        </div>
-        <div class="client-details-email">
-          <input type="email" class="input-to-email" placeholder="Anenome@example.com" />
-        </div>
-      </div>
-    </div>
+        <div class="client-details-content">
+          <div class="client-details-name">
+            <input type="text" class="input-to-name" placeholder="Radius Lab" v-model="to_name" />
+          </div>
+          <div class="client-details-address">
+            <input
+              type="text"
+              class="input-to-address"
+              placeholder="新竹市大學路300號5樓"
+              v-model="to_address"
+            />
+          </div>
 
-    <!-- invoice-info -->
-    <div class="invoice-info section">
-      <!-- invoice-number -->
-      <div class="invoice-number">
-        <div class="invoice-number-title title">INVOICE NO.</div>
-        <div class="invoie-number-form">
-          <label class="sr-only" for="count">invoiceNo</label>
-
-          <b-form-input id="count" placeholder="0001"></b-form-input>
-        </div>
-      </div>
-
-      <!--  invoice-date  -->
-      <div class="invoice-date">
-        <div class="invoice-date-title title">INVOICE DATE</div>
-        <div class="invoice-date-form">
-          <div class="invoie-number-form">
-            <label class="sr-only" for="date">invoiceDate</label>
-
-            <b-form-input id="date" placeholder="0001" type="date"></b-form-input>
+          <div class="client-details-phone">
+            <input type="tel" class="input-to-phone" placeholder="+886 847374958" v-model="to_tel" />
+          </div>
+          <div class="client-details-email">
+            <input
+              type="email"
+              class="input-to-email"
+              placeholder="Anenome@example.com"
+              v-model="to_email"
+            />
           </div>
         </div>
       </div>
-    </div>
 
-    <!--  product section  -->
-    <div class="product-section section">
-      <div class="product-section-title">
-        PRODUCT
-        <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
+      <!-- invoice-info -->
+      <div class="invoice-info section">
+        <!-- invoice-number -->
+        <div class="invoice-number">
+          <div class="invoice-number-title title">INVOICE NO.</div>
+          <div class="invoie-number-form">
+            <label class="sr-only" for="count">invoiceNo</label>
+
+            <b-form-input id="count" placeholder="0001" v-model="invoice_number"></b-form-input>
+          </div>
+        </div>
+
+        <!--  invoice-date  -->
+        <div class="invoice-date">
+          <div class="invoice-date-title title">INVOICE DATE</div>
+          <div class="invoice-date-form">
+            <div class="invoie-number-form">
+              <label class="sr-only" for="date">invoiceDate</label>
+
+              <b-form-input id="date" placeholder="0001" type="date" v-model="invoice_date"></b-form-input>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button class="add-product" @click.stop.prevent="addItem(index)">
-        <div class="btn-add-product">＋</div>
-      </button>
+      <!--  product section  -->
+      <div class="product-section section">
+        <div class="product-section-title">
+          PRODUCT
+          <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
+        </div>
 
-      <div class="add-product-notice">Add line</div>
-      <table class="product-container">
-        <thead>
-          <tr class="items-section">
-            <td class="item item-description">DESCRIPTION</td>
-            <td class="item item-quantity">QTY.</td>
-            <td class="item item-price">PRICE</td>
-            <td class="item item-discount">DISC.%</td>
-            <td class="item item-tax">TAX%</td>
-            <td class="item item-total">TOTAL</td>
-            <td class="item item-remove"></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="items-section" v-for="(items, index) in items" :key="index">
-            <td class="item item-description">
-              <label class="sr-only" for="description">itemDescription</label>
-              <b-form-input id="description" placeholder="chocolate" v-model="items.description"></b-form-input>
-            </td>
+        <button class="add-product" @click.stop.prevent="addItem(index)">
+          <div class="btn-add-product">＋</div>
+        </button>
 
-            <td class="item item-quantity">
-              <label class="sr-only" for="quantity">itemQuantity</label>
-              <b-form-input
-                id="quantity"
-                placeholder="3"
-                v-model="items.quantity"
-                v-on:change="itemTotal(index)"
-              ></b-form-input>
-            </td>
+        <div class="add-product-notice">Add line</div>
+        <table class="product-container">
+          <thead>
+            <tr class="items-section">
+              <td class="item item-description">DESCRIPTION</td>
+              <td class="item item-quantity">QTY.</td>
+              <td class="item item-price">PRICE</td>
+              <td class="item item-discount">DISC.%</td>
+              <td class="item item-tax">TAX%</td>
+              <td class="item item-total">TOTAL</td>
+              <td class="item item-remove"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="items-section" v-for="(items, index) in items" :key="index">
+              <td class="item item-description">
+                <label class="sr-only" for="description">itemDescription</label>
+                <b-form-input id="description" placeholder="chocolate" v-model="items.description"></b-form-input>
+              </td>
 
-            <td class="item item-price">
-              <label class="sr-only" for="price">itemPrice</label>
-              <b-form-input
-                id="price"
-                placeholder="200"
-                v-model="items.price"
-                v-on:change="itemTotal(index)"
-              ></b-form-input>
-            </td>
+              <td class="item item-quantity">
+                <label class="sr-only" for="quantity">itemQuantity</label>
+                <b-form-input
+                  id="quantity"
+                  placeholder="3"
+                  v-model="items.quantity"
+                  v-on:change="itemTotal(index)"
+                ></b-form-input>
+              </td>
 
-            <td class="item item-discount">
-              <label class="sr-only" for="discount">itemDiscount</label>
-              <b-form-input
-                id="discount"
-                placeholder="5"
-                v-model="items.discount"
-                v-on:change="itemTotal(index)"
-              ></b-form-input>
-            </td>
-            <td class="item item-tax">
-              <label class="sr-only" for="tax">itemTax</label>
-              <b-form-input
-                id="tax"
-                placeholder="3"
-                v-model="items.tax"
-                v-on:change="itemTotal(index)"
-              ></b-form-input>
-            </td>
-            <td class="item item-total">
-              <label class="sr-only" for="tax">itemTotal</label>
-              <b-form-input id="tax" placeholder="8" :value="items.total | money"></b-form-input>
-            </td>
-            <td class="item item-remove">
-              <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="items-section final-section">
-            <td class="final-title">DISCOUNT</td>
-            <td class="final-number line">{{itemsDiscountTotal | money}}</td>
-          </tr>
-          <tr class="items-section final-section">
-            <td class="final-title">TAX</td>
-            <td class="final-number">{{itemsTaxTotal | money}}</td>
-          </tr>
-          <tr class="items-section final-section">
-            <td class="final-title final-total">TOTAL</td>
-            <td class="final-number total-container">{{itemsTotal | money}}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+              <td class="item item-price">
+                <label class="sr-only" for="price">itemPrice</label>
+                <b-form-input
+                  id="price"
+                  placeholder="200"
+                  v-model="items.price"
+                  v-on:change="itemTotal(index)"
+                ></b-form-input>
+              </td>
 
-    <!-- client notes -->
-    <div class="client-notes section">
-      <div class="client-notes-title">NOTES FOR CLIENT</div>
-      <!-- <div class="client-notes-show">
+              <td class="item item-discount">
+                <label class="sr-only" for="discount">itemDiscount</label>
+                <b-form-input
+                  id="discount"
+                  placeholder="5"
+                  v-model="items.discount"
+                  v-on:change="itemTotal(index)"
+                ></b-form-input>
+              </td>
+              <td class="item item-tax">
+                <label class="sr-only" for="tax">itemTax</label>
+                <b-form-input
+                  id="tax"
+                  placeholder="3"
+                  v-model="items.tax"
+                  v-on:change="itemTotal(index)"
+                ></b-form-input>
+              </td>
+              <td class="item item-total">
+                <label class="sr-only" for="tax">itemTotal</label>
+                <b-form-input id="tax" placeholder="8" :value="items.total | money"></b-form-input>
+              </td>
+              <td class="item item-remove">
+                <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="items-section final-section">
+              <td class="final-title">DISCOUNT</td>
+              <td class="final-number line">{{itemsDiscountTotal | money}}</td>
+            </tr>
+            <tr class="items-section final-section">
+              <td class="final-title">TAX</td>
+              <td class="final-number">{{itemsTaxTotal | money}}</td>
+            </tr>
+            <tr class="items-section final-section">
+              <td class="final-title final-total">TOTAL</td>
+              <td class="final-number total-container">{{itemsTotal | money}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <!-- client notes -->
+      <div class="client-notes section">
+        <div class="client-notes-title">NOTES FOR CLIENT</div>
+        <!-- <div class="client-notes-show">
         <button class="client-notes-icon"></button>
-      </div>-->
-      <textarea
-        class="client-notes-textarea"
-        name="client-notes"
-        id="client-notes"
-        cols="30"
-        rows="10"
-        placeholder="such as 'thank you for your business'"
-      ></textarea>
-    </div>
+        </div>-->
+        <textarea
+          class="client-notes-textarea"
+          name="client-notes"
+          id="client-notes"
+          cols="30"
+          rows="10"
+          placeholder="such as 'thank you for your business'"
+        ></textarea>
+      </div>
 
-    <div class="save-section">
-      <button class="save-btn" type="submit">
-        <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
-      </button>
+      <div class="save-section section">
+        <button class="btn-preview">preview</button>
+        <button class="save-btn" type="submit">
+          <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
+        </button>
+      </div>
+    </form>
+
+    <!--  preview invoice  -->
+
+    <div class="container-preview">
+      <div class="preview-title section">Invoice: {{invoice_title}}</div>
+
+      <div class="preview-invoice-contact section">
+        <div class="preview-invoice-from">
+          Invoice form
+          <div class="preview-from-name">{{from_name}}</div>
+          <div class="preview-from-address">{{from_address}}</div>
+          <div class="preview-from-tel">{{from_tel}}</div>
+          <div class="preview-from-email">{{from_email}}</div>
+        </div>
+
+        <div class="preview-invoice-to">
+          Invoice to
+          <div class="preview-to-name">{{to_name}}</div>
+          <div class="preview-to-address">{{to_address}}</div>
+          <div class="preview-to-tel">{{to_tel}}</div>
+          <div class="preview-to-email">{{to_email}}</div>
+        </div>
+      </div>
+
+      <div class="preview-invoice-detail section">
+        <div class="preview-invoice-number">Invoice number: {{invoice_number}}</div>
+        <div class="preview-invoice-date">Invoice date: {{invoice_date}}</div>
+      </div>
+
+      <div class="product-section section">
+        <div class="product-section-title">
+          PRODUCT
+          <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
+        </div>
+
+        <table class="product-container">
+          <thead>
+            <tr class="items-section">
+              <td class="item item-description">DESCRIPTION</td>
+              <td class="item item-quantity">QTY.</td>
+              <td class="item item-price">PRICE</td>
+              <td class="item item-discount">DISC.%</td>
+              <td class="item item-tax">TAX%</td>
+              <td class="item item-total">TOTAL</td>
+              <td class="item item-remove"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="items-section" v-for="(items, index) in items" :key="index">
+              <td class="item item-description">{{items.description}}</td>
+
+              <td class="item item-quantity">{{items.quantity}}</td>
+
+              <td class="item item-price">{{items.price}}</td>
+
+              <td class="item item-discount">{{items.discount}}</td>
+              <td class="item item-tax">{{items.tax}}</td>
+
+              <td class="item item-total">{{items.total}}</td>
+              <td class="item item-remove">
+                <!-- <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button> -->
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="items-section final-section">
+              <td class="final-title">DISCOUNT</td>
+              <td class="final-number line">{{itemsDiscountTotal | money}}</td>
+            </tr>
+            <tr class="items-section final-section">
+              <td class="final-title">TAX</td>
+              <td class="final-number">{{itemsTaxTotal | money}}</td>
+            </tr>
+            <tr class="items-section final-section">
+              <td class="final-title final-total">TOTAL</td>
+              <td class="final-number total-container">{{itemsTotal | money}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -226,7 +340,18 @@ import * as html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
+      invoice_title: "",
+      from_name: "",
+      from_address: "",
+      from_tel: "",
+      from_email: "",
+      to_name: "",
+      to_address: "",
+      to_tel: "",
+      to_email: "",
       index: 1,
+      invoice_number: "",
+      invoice_date: "",
       items: [
         {
           description: "",
@@ -683,6 +808,20 @@ export default {
   flex-direction: row-reverse;
 }
 
+.btn-preview {
+  background: #4a4aff;
+  height: 38px;
+  width: 80px;
+  color: #ffffff;
+  border-radius: 5px;
+  margin: 15px 15px 15px 0;
+  box-shadow: 2px 2px 10px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn-preview:hover {
+  background: #9bd2ed;
+}
+
 .save-btn {
   background: #4a4aff;
   height: 38px;
@@ -703,5 +842,14 @@ export default {
 
 .save-icon {
   width: 35%;
+}
+
+.preview-invoice-contact {
+  display: flex;
+}
+
+.preview-invoice-from,
+.preview-invoice-to {
+  width: 50%;
 }
 </style>
