@@ -229,9 +229,7 @@
       <!-- client notes -->
       <div class="client-notes section">
         <div class="client-notes-title">NOTES FOR CLIENT</div>
-        <!-- <div class="client-notes-show">
-        <button class="client-notes-icon"></button>
-        </div>-->
+
         <textarea
           class="client-notes-textarea"
           name="client-notes"
@@ -239,43 +237,47 @@
           cols="30"
           rows="10"
           placeholder="such as 'thank you for your business'"
+          v-model="notes"
         ></textarea>
       </div>
 
       <div class="save-section section">
-        <button class="btn-preview">preview</button>
-        <button class="save-btn" type="submit">
-          <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
-        </button>
+        <button class="btn-preview" @click.stop.prevent="previewInvoice">preview</button>
       </div>
     </form>
 
     <!--  preview invoice  -->
 
-    <div class="container-preview">
-      <div class="preview-title section">Invoice: {{invoice_title}}</div>
+    <div v-if="preview" id="kabibala" class="container-preview">
+      <div class="preview-title section">INVOICE TITLE: {{invoice_title}}</div>
 
       <div class="preview-invoice-contact section">
         <div class="preview-invoice-from">
-          Invoice form
-          <div class="preview-from-name">{{from_name}}</div>
-          <div class="preview-from-address">{{from_address}}</div>
-          <div class="preview-from-tel">{{from_tel}}</div>
-          <div class="preview-from-email">{{from_email}}</div>
+          INVOICE form
+          <div class="preview-from-name preview">{{from_name}}</div>
+          <div class="preview-from-address preview">{{from_address}}</div>
+          <div class="preview-from-tel preview">{{from_tel}}</div>
+          <div class="preview-from-email preview">{{from_email}}</div>
         </div>
 
         <div class="preview-invoice-to">
-          Invoice to
-          <div class="preview-to-name">{{to_name}}</div>
-          <div class="preview-to-address">{{to_address}}</div>
-          <div class="preview-to-tel">{{to_tel}}</div>
-          <div class="preview-to-email">{{to_email}}</div>
+          INVOICE to
+          <div class="preview-to-name preview">{{to_name}}</div>
+          <div class="preview-to-address preview">{{to_address}}</div>
+          <div class="preview-to-tel preview">{{to_tel}}</div>
+          <div class="preview-to-email preview">{{to_email}}</div>
         </div>
       </div>
 
       <div class="preview-invoice-detail section">
-        <div class="preview-invoice-number">Invoice number: {{invoice_number}}</div>
-        <div class="preview-invoice-date">Invoice date: {{invoice_date}}</div>
+        <div class="preview-invoice-number">
+          INVOICE NO:
+          <div class="preview">{{invoice_number}}</div>
+        </div>
+        <div class="preview-invoice-date">
+          INVOICE DATE:
+          <div class="preview">{{invoice_date}}</div>
+        </div>
       </div>
 
       <div class="product-section section">
@@ -287,47 +289,52 @@
         <table class="product-container">
           <thead>
             <tr class="items-section">
-              <td class="item item-description">DESCRIPTION</td>
-              <td class="item item-quantity">QTY.</td>
-              <td class="item item-price">PRICE</td>
-              <td class="item item-discount">DISC.%</td>
-              <td class="item item-tax">TAX%</td>
-              <td class="item item-total">TOTAL</td>
-              <td class="item item-remove"></td>
+              <td class="item preview-item-description">DESCRIPTION</td>
+              <td class="item preview-item-quantity">QTY.</td>
+              <td class="item preview-item-price">PRICE</td>
+              <td class="item preview-item-discount">DISC.%</td>
+              <td class="item preview-item-tax">TAX%</td>
+              <td class="item preview-item-total">TOTAL</td>
             </tr>
           </thead>
           <tbody>
-            <tr class="items-section" v-for="(items, index) in items" :key="index">
-              <td class="item item-description">{{items.description}}</td>
+            <tr class="items-section-preview preview" v-for="(items, index) in items" :key="index">
+              <td class="item preview-item-description">{{items.description}}</td>
 
-              <td class="item item-quantity">{{items.quantity}}</td>
+              <td class="item preview-item-quantity">{{items.quantity}}</td>
 
-              <td class="item item-price">{{items.price}}</td>
+              <td class="item preview-item-price">{{items.price}}</td>
 
-              <td class="item item-discount">{{items.discount}}</td>
-              <td class="item item-tax">{{items.tax}}</td>
+              <td class="item preview-item-discount">{{items.discount}}</td>
+              <td class="item preview-item-tax">{{items.tax}}</td>
 
-              <td class="item item-total">{{items.total}}</td>
-              <td class="item item-remove">
-                <!-- <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button> -->
-              </td>
+              <td class="item preview-item-total">{{items.total}}</td>
             </tr>
           </tbody>
           <tfoot>
             <tr class="items-section final-section">
-              <td class="final-title">DISCOUNT</td>
-              <td class="final-number line">{{itemsDiscountTotal | money}}</td>
+              <td class="final-preview-title">DISCOUNT</td>
+              <td class="final-preview-number line">{{itemsDiscountTotal | money}}</td>
             </tr>
             <tr class="items-section final-section">
-              <td class="final-title">TAX</td>
-              <td class="final-number">{{itemsTaxTotal | money}}</td>
+              <td class="final-preview-title">TAX</td>
+              <td class="final-preview-number line">{{itemsTaxTotal | money}}</td>
             </tr>
             <tr class="items-section final-section">
-              <td class="final-title final-total">TOTAL</td>
-              <td class="final-number total-container">{{itemsTotal | money}}</td>
+              <td class="final-preview-title">TOTAL</td>
+              <td class="final-preview-number">{{itemsTotal | money}}</td>
             </tr>
           </tfoot>
         </table>
+      </div>
+      <div v-if="notes.length > 0" class="client-notes section">
+        <div class="client-notes-title">NOTES FOR CLIENT</div>
+        <div class="client-notes-container">{{notes}}</div>
+      </div>
+      <div class="save-section section">
+        <button class="save-btn" @click.stop.prevent="download()">
+          <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
+        </button>
       </div>
     </div>
   </div>
@@ -363,7 +370,9 @@ export default {
           tax_amount: "",
           total: ""
         }
-      ]
+      ],
+      notes: "",
+      preview: false
     };
   },
   methods: {
@@ -371,11 +380,20 @@ export default {
     download() {
       const element = document.querySelector("#invoice");
       const opt = {
-        margin: 3,
+        margin: 1,
         filename: "invoice.pdf",
         image: { type: "jpeg", quality: 1 },
         html2canvas: { scale: 2 }
       };
+
+      // const element = document.getElementById("invoice");
+      // const opt = {
+      //   margin: 1,
+      //   filename: "invoice.pdf",
+      //   image: { type: "jpeg", quality: 0.98 },
+      //   html2canvas: { scale: 2 },
+      //   jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+      // };
 
       html2pdf()
         .from(element)
@@ -445,6 +463,11 @@ export default {
         this.items[index].tax_amount = taxDisTotal;
         this.items[index].total = calculatedTotal - discountTotal + taxDisTotal;
       }
+    },
+
+    //preview invoice
+    previewInvoice() {
+      this.preview = true;
     }
 
     // download(e) {
@@ -844,6 +867,17 @@ export default {
   width: 35%;
 }
 
+.preview-title {
+  font-size: 22px;
+  color: #bebebe;
+}
+
+.preview {
+  font-size: 15px;
+  font-weight: 500;
+  color: #5b5b5b;
+}
+
 .preview-invoice-contact {
   display: flex;
 }
@@ -852,4 +886,64 @@ export default {
 .preview-invoice-to {
   width: 50%;
 }
+
+.preview-from-name,
+.preview-to-name {
+  font-size: 18px;
+  margin: 7px 0px;
+}
+
+.preview-invoice-number {
+  margin-bottom: 15px;
+}
+
+.items-section-preview {
+  display: flex;
+  margin: 5px 0px;
+}
+
+.preview-item-description {
+  width: 35%;
+}
+
+.preview-item-quantity {
+  width: 10%;
+}
+
+.preview-item-price {
+  width: 15%;
+}
+
+.preview-item-discount {
+  width: 15%;
+}
+
+.preview-item-tax {
+  width: 13%;
+}
+
+.preview-item-total {
+  width: 17%;
+}
+
+.final-preview-title {
+  width: 83%;
+  text-align: end;
+  margin-right: 15px;
+  /* margin-right: 15%; */
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.final-preview-number {
+  position: relative;
+  width: 17%;
+}
+
+.final-preview-total {
+  color: #ffffff;
+}
+
+/* .client-notes-container {
+  height: 80%;
+} */
 </style>
