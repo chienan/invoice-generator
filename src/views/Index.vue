@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <form class="invoice" id="invoice" ref="content" @submit.stop.prevent="download">
+  <div class="container" ref="container">
+    <form class="invoice" id="invoice" @submit.stop.prevent="download">
       <div class="nav">
         <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
         <div class="main-title">TOSO INVOICE GENERATOR</div>
@@ -59,18 +59,6 @@
           </div>
         </div>
       </div>
-      <!-- <div class="client-name section">
-      <div class="client-name-title title">INVOICE TO</div>
-      <div class="client-name-form">
-        <div class="form-section">
-          <label class="sr-only" for="name">ClientName</label>
-          <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
-            <b-form-input id="name" placeholder="ClientName"></b-form-input>
-          </b-input-group>
-        </div>
-        <div class="add-new-section">＋ NEW</div>
-      </div>
-      </div>-->
 
       <!--invoice to-->
       <div class="client-details section">
@@ -242,6 +230,15 @@
       </div>
 
       <div class="save-section section">
+        <!-- scroll down UI -->
+        <div v-if="scroll" class="scroll-section" ref="scroll">
+          <div class="scroll-down">
+            <div class="chevron"></div>
+            <div class="chevron"></div>
+            <div class="chevron"></div>
+            <span class="text">Scroll down</span>
+          </div>
+        </div>
         <button class="btn-preview" @click.stop.prevent="previewInvoice">preview</button>
       </div>
     </form>
@@ -343,6 +340,7 @@
 <script>
 // import jspdf from "jspdf";
 import * as html2pdf from "html2pdf.js";
+// import Preview from '../components/Preview'
 
 export default {
   data() {
@@ -372,28 +370,20 @@ export default {
         }
       ],
       notes: "",
-      preview: false
+      preview: false,
+      scroll: false
     };
   },
   methods: {
     // downlad invoice as pdf
     download() {
-      const element = document.querySelector("#invoice");
+      const element = document.querySelector("#preview-invoice-container");
       const opt = {
         margin: 1,
         filename: "invoice.pdf",
         image: { type: "jpeg", quality: 1 },
         html2canvas: { scale: 2 }
       };
-
-      // const element = document.getElementById("invoice");
-      // const opt = {
-      //   margin: 1,
-      //   filename: "invoice.pdf",
-      //   image: { type: "jpeg", quality: 0.98 },
-      //   html2canvas: { scale: 2 },
-      //   jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-      // };
 
       html2pdf()
         .from(element)
@@ -468,6 +458,8 @@ export default {
     //preview invoice
     previewInvoice() {
       this.preview = true;
+      this.scroll = true;
+      setTimeout(() => (this.scroll = false), 3500);
     }
 
     // download(e) {
@@ -508,6 +500,7 @@ export default {
 
 
 <style>
+/* main contents */
 .nav {
   display: flex;
   justify-content: flex-end;
@@ -536,6 +529,7 @@ export default {
   width: 100%;
   border: 1px solid #dcdcdc;
   max-width: 720px;
+  /* overflow-y: scroll; */
 }
 
 .nav,
@@ -726,18 +720,6 @@ export default {
   background-color: #9bd2ed;
 }
 
-/* .total-container::after::hover {
-  position: absolute;
-  content: "";
-  background-color: black;
-  border-radius: 5px;
-  height: 200%;
-  width: 190%;
-  right: 25%;
-  bottom: -50%;
-  z-index: -1;
-} */
-
 .btn-item-remove {
   font-size: 25px;
   font-weight: 300;
@@ -753,11 +735,9 @@ export default {
 
 .add-product {
   position: absolute;
-  /* border: 1px solid #4a4aff; */
   background: #4a4aff;
   height: 38px;
   width: 38px;
-  /* right: 15px; */
   bottom: 120px;
   border-radius: 50%;
   display: flex;
@@ -767,7 +747,6 @@ export default {
 }
 
 .add-product:hover {
-  /* background: #88c8e7; */
   background: #9bd2ed;
 }
 
@@ -829,6 +808,7 @@ export default {
 .save-section {
   display: flex;
   flex-direction: row-reverse;
+  position: relative;
 }
 
 .btn-preview {
@@ -845,6 +825,98 @@ export default {
   background: #9bd2ed;
 }
 
+/* scroll down UI */
+
+.scroll-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 320px;
+  font-weight: 530;
+  letter-spacing: 0.5px;
+}
+
+.scroll-down {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.chevron {
+  position: absolute;
+  width: 28px;
+  height: 8px;
+  opacity: 0;
+  transform: scale3d(0.5, 0.5, 0.5);
+  animation: move 3s ease-out infinite;
+}
+
+.chevron:first-child {
+  animation: move 3s ease-out 1s infinite;
+}
+
+.chevron:nth-child(2) {
+  animation: move 3s ease-out 2s infinite;
+}
+
+.chevron:before,
+.chevron:after {
+  content: " ";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 51%;
+  background: #4a4aff;
+}
+
+.chevron:before {
+  left: 0;
+  transform: skew(0deg, 30deg);
+}
+
+.chevron:after {
+  right: 0;
+  width: 50%;
+  transform: skew(0deg, -30deg);
+}
+
+@keyframes move {
+  25% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 1;
+    transform: translateY(30px);
+  }
+  67% {
+    opacity: 1;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(55px) scale3d(0.5, 0.5, 0.5);
+  }
+}
+
+.text {
+  font-size: 12px;
+  color: #4a4aff;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.25;
+  animation: pulse 2s linear alternate infinite;
+}
+
+@keyframes pulse {
+  to {
+    opacity: 1;
+  }
+}
+
+/* preview-section */
 .save-btn {
   background: #4a4aff;
   height: 38px;
