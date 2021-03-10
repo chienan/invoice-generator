@@ -1,6 +1,6 @@
 <template>
   <div class="container" ref="container">
-    <form class="invoice" id="invoice" @submit.stop.prevent="download">
+    <div class="invoice" id="invoice" @submit.stop.prevent="download">
       <div class="nav">
         <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
         <div class="main-title">TOSO INVOICE GENERATOR</div>
@@ -12,7 +12,7 @@
           <div class="form-section">
             <label class="sr-only" for="title">InvoiceTitle</label>
 
-            <b-form-input id="title" v-model="invoice_title" placeholder="InvoiceTitle"></b-form-input>
+            <b-form-input id="title" v-model="invoice_title" ref="title" placeholder="InvoiceTitle"></b-form-input>
           </div>
         </div>
       </div>
@@ -20,7 +20,7 @@
       <div class="client-name section">
         <div class="client-details-container">
           <div class="client-details-title">INVOICE from</div>
-          <div class="client-details-edit">EDIT</div>
+          <!-- <div class="client-details-edit">EDIT</div> -->
         </div>
 
         <div class="client-details-content">
@@ -64,7 +64,7 @@
       <div class="client-details section">
         <div class="client-details-container">
           <div class="client-details-title">INVOICE to</div>
-          <div class="client-details-edit">EDIT</div>
+          <!-- <div class="client-details-edit">EDIT</div> -->
         </div>
 
         <div class="client-details-content">
@@ -146,12 +146,10 @@
           <tbody>
             <tr class="items-section" v-for="(items, index) in items" :key="index">
               <td class="item item-description">
-                <label class="sr-only" for="description">itemDescription</label>
                 <b-form-input id="description" placeholder="chocolate" v-model="items.description"></b-form-input>
               </td>
 
               <td class="item item-quantity">
-                <label class="sr-only" for="quantity">itemQuantity</label>
                 <b-form-input
                   id="quantity"
                   placeholder="3"
@@ -161,7 +159,6 @@
               </td>
 
               <td class="item item-price">
-                <label class="sr-only" for="price">itemPrice</label>
                 <b-form-input
                   id="price"
                   placeholder="200"
@@ -171,7 +168,6 @@
               </td>
 
               <td class="item item-discount">
-                <label class="sr-only" for="discount">itemDiscount</label>
                 <b-form-input
                   id="discount"
                   placeholder="5"
@@ -180,7 +176,6 @@
                 ></b-form-input>
               </td>
               <td class="item item-tax">
-                <label class="sr-only" for="tax">itemTax</label>
                 <b-form-input
                   id="tax"
                   placeholder="3"
@@ -189,7 +184,6 @@
                 ></b-form-input>
               </td>
               <td class="item item-total">
-                <label class="sr-only" for="tax">itemTotal</label>
                 <b-form-input id="tax" placeholder="8" :value="items.total | money"></b-form-input>
               </td>
               <td class="item item-remove">
@@ -241,7 +235,7 @@
         </div>
         <button class="btn-preview" @click.stop.prevent="previewInvoice">preview</button>
       </div>
-    </form>
+    </div>
 
     <!--  preview invoice  -->
 
@@ -373,6 +367,11 @@ export default {
       preview: false,
       scroll: false
     };
+  },
+  created() {
+    setTimeout(() => {
+      this.$refs.title.focus();
+    });
   },
   methods: {
     // downlad invoice as pdf
@@ -537,7 +536,10 @@ export default {
 .client-name,
 .client-details,
 .product-section,
-.client-notes {
+.client-notes,
+.preview-title,
+.preview-invoice-contact,
+.preview-invoice-detail {
   border-bottom: 1px solid #dcdcdc;
 }
 
@@ -549,7 +551,6 @@ export default {
   justify-content: space-between;
 }
 
-.form-section,
 .add-new-section,
 .client-details-edit {
   display: flex;
@@ -557,13 +558,22 @@ export default {
   align-items: center;
 }
 
+.form-section {
+  display: flex;
+  align-items: center;
+}
+
 .title {
   margin-bottom: 10px;
 }
 
+#title {
+  width: 50%;
+}
+
 .form-section,
 .client-details-title {
-  width: 80%;
+  width: 100%;
 }
 
 .input-to-name,
@@ -587,12 +597,14 @@ export default {
 }
 
 .client-details-content {
-  border: 2px dashed #dcdcdc;
+  /* border: 2px dashed #ecf5ff; */
   padding: 20px 25px;
   margin-top: 15px;
   color: #666666;
   font-size: 15px;
   font-weight: normal;
+  background: #ecf5ff;
+  border-radius: 5px;
 }
 
 .client-details-name {

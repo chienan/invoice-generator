@@ -72,11 +72,21 @@ button[disabled] {
 
 input {
   padding: 0;
+  background: transparent;
+  border-radius: 5px;
 }
 input:required {
   box-shadow: none;
 }
 input:invalid {
   box-shadow: none;
+}
+
+input:hover {
+  border: 1px solid #4a4aff;
+}
+
+input:focus {
+  border: 1px solid #9bd2ed;
 }
 </style>
