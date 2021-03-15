@@ -1,6 +1,6 @@
 <template>
   <div class="container" ref="container">
-    <div class="invoice" id="invoice" @submit.stop.prevent="download">
+    <div class="invoice" id="invoice">
       <div class="nav">
         <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
         <div class="main-title">TOSO INVOICE GENERATOR</div>
@@ -12,7 +12,13 @@
           <div class="form-section">
             <label class="sr-only" for="title">InvoiceTitle</label>
 
-            <b-form-input id="title" v-model="invoice_title" ref="title" placeholder="InvoiceTitle"></b-form-input>
+            <b-form-input
+              id="title"
+              v-model="invoice_title"
+              ref="title"
+              placeholder="InvoiceTitle"
+              class="input-type1"
+            ></b-form-input>
           </div>
         </div>
       </div>
@@ -27,35 +33,39 @@
           <div class="client-details-name">
             <input
               type="text"
-              class="input-from-name"
+              class="input-from-name input-type2"
               placeholder="HAYABUSA corp."
               v-model="from_name"
             />
+            <span class="focus-border"></span>
           </div>
           <div class="client-details-address">
             <input
               type="text"
-              class="input-from-address"
+              class="input-from-address input-type3"
               placeholder="台北市內湖區公道路5號"
               v-model="from_address"
             />
+            <span class="focus-border-2"></span>
           </div>
 
           <div class="client-details-phone">
             <input
               type="tel"
-              class="input-from-phone"
+              class="input-from-phone input-type3"
               placeholder="+886 897832490"
               v-model="from_tel"
             />
+            <span class="focus-border-2"></span>
           </div>
           <div class="client-details-email">
             <input
               type="email"
-              class="input-from-email"
+              class="input-from-email input-type3"
               placeholder="hayabusa@example.com"
               v-model="from_email"
             />
+            <span class="focus-border-2"></span>
           </div>
         </div>
       </div>
@@ -69,27 +79,41 @@
 
         <div class="client-details-content">
           <div class="client-details-name">
-            <input type="text" class="input-to-name" placeholder="Radius Lab" v-model="to_name" />
+            <input
+              type="text"
+              class="input-to-name input-type2"
+              placeholder="Radius Lab"
+              v-model="to_name"
+            />
+            <span class="focus-border"></span>
           </div>
           <div class="client-details-address">
             <input
               type="text"
-              class="input-to-address"
+              class="input-to-address input-type3"
               placeholder="新竹市大學路300號5樓"
               v-model="to_address"
             />
+            <span class="focus-border-2"></span>
           </div>
 
           <div class="client-details-phone">
-            <input type="tel" class="input-to-phone" placeholder="+886 847374958" v-model="to_tel" />
+            <input
+              type="tel"
+              class="input-to-phone input-type3"
+              placeholder="+886 847374958"
+              v-model="to_tel"
+            />
+            <span class="focus-border-2"></span>
           </div>
           <div class="client-details-email">
             <input
               type="email"
-              class="input-to-email"
+              class="input-to-email input-type3"
               placeholder="Anenome@example.com"
               v-model="to_email"
             />
+            <span class="focus-border-2"></span>
           </div>
         </div>
       </div>
@@ -102,7 +126,13 @@
           <div class="invoie-number-form">
             <label class="sr-only" for="count">invoiceNo</label>
 
-            <b-form-input id="count" placeholder="0001" v-model="invoice_number"></b-form-input>
+            <b-form-input
+              class="input-type1"
+              id="count"
+              placeholder="0001"
+              v-model="invoice_number"
+            ></b-form-input>
+            <span class="focus-border"></span>
           </div>
         </div>
 
@@ -113,7 +143,13 @@
             <div class="invoie-number-form">
               <label class="sr-only" for="date">invoiceDate</label>
 
-              <b-form-input id="date" placeholder="0001" type="date" v-model="invoice_date"></b-form-input>
+              <b-form-input
+                id="date"
+                class="input-type1"
+                placeholder="0001"
+                type="date"
+                v-model="invoice_date"
+              ></b-form-input>
             </div>
           </div>
         </div>
@@ -146,12 +182,18 @@
           <tbody>
             <tr class="items-section" v-for="(items, index) in items" :key="index">
               <td class="item item-description">
-                <b-form-input id="description" placeholder="chocolate" v-model="items.description"></b-form-input>
+                <b-form-input
+                  id="description"
+                  class="input-type1"
+                  placeholder="chocolate"
+                  v-model="items.description"
+                ></b-form-input>
               </td>
 
               <td class="item item-quantity">
                 <b-form-input
                   id="quantity"
+                  class="input-type1"
                   placeholder="3"
                   v-model="items.quantity"
                   v-on:change="itemTotal(index)"
@@ -161,6 +203,7 @@
               <td class="item item-price">
                 <b-form-input
                   id="price"
+                  class="input-type1"
                   placeholder="200"
                   v-model="items.price"
                   v-on:change="itemTotal(index)"
@@ -170,6 +213,7 @@
               <td class="item item-discount">
                 <b-form-input
                   id="discount"
+                  class="input-type1"
                   placeholder="5"
                   v-model="items.discount"
                   v-on:change="itemTotal(index)"
@@ -178,13 +222,14 @@
               <td class="item item-tax">
                 <b-form-input
                   id="tax"
+                  class="input-type1"
                   placeholder="3"
                   v-model="items.tax"
                   v-on:change="itemTotal(index)"
                 ></b-form-input>
               </td>
               <td class="item item-total">
-                <b-form-input id="tax" placeholder="8" :value="items.total | money"></b-form-input>
+                <b-form-input class="input-type1" placeholder="8" :value="items.total | money"></b-form-input>
               </td>
               <td class="item item-remove">
                 <button class="btn-item-remove" @click.stop.prevent="removeItem(index)">×</button>
@@ -239,8 +284,11 @@
 
     <!--  preview invoice  -->
 
-    <div v-if="preview" id="kabibala" class="container-preview">
-      <div class="preview-title section">INVOICE TITLE: {{invoice_title}}</div>
+    <div v-if="preview" id="preview-invoice" class="container-preview">
+      <div class="preview-title section">
+        {{ invoice_title.length ? invoice_title : 'INVOICE' }}
+        <!-- INVOICE TITLE: {{invoice_title}} -->
+      </div>
 
       <div class="preview-invoice-contact section">
         <div class="preview-invoice-from">
@@ -322,19 +370,20 @@
         <div class="client-notes-title">NOTES FOR CLIENT</div>
         <div class="client-notes-container">{{notes}}</div>
       </div>
-      <div class="save-section section">
-        <button class="save-btn" @click.stop.prevent="download()">
-          <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
-        </button>
-      </div>
+    </div>
+
+    <!-- download pdf -->
+    <div v-if="preview" class="save-section section">
+      <button class="save-btn" @click.stop.prevent="generateReport()">
+        <img src="https://i.imgur.com/vdESFr3.png" class="save-icon" alt />
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-// import jspdf from "jspdf";
-import * as html2pdf from "html2pdf.js";
-// import Preview from '../components/Preview'
+// import * as html2pdf from "html2pdf.js";
+import VueHtml2pdf from "vue-html2pdf";
 
 export default {
   data() {
@@ -373,21 +422,29 @@ export default {
       this.$refs.title.focus();
     });
   },
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    VueHtml2pdf
+  },
   methods: {
     // downlad invoice as pdf
-    download() {
-      const element = document.querySelector("#preview-invoice-container");
-      const opt = {
-        margin: 1,
-        filename: "invoice.pdf",
-        image: { type: "jpeg", quality: 1 },
-        html2canvas: { scale: 2 }
-      };
+    // download() {
+    //   const element = document.querySelector("#preview-invoice");
+    //   const opt = {
+    //     margin: 1,
+    //     filename: "invoice.pdf",
+    //     image: { type: "jpeg", quality: 1 },
+    //     html2canvas: { scale: 2 }
+    //   };
 
-      html2pdf()
-        .from(element)
-        .set(opt)
-        .save();
+    //   html2pdf()
+    //     .from(element)
+    //     .set(opt)
+    //     .save();
+    // },
+
+    generateReport() {
+      this.$refs.html2Pdf.generatePdf();
     },
 
     // add product
@@ -612,14 +669,14 @@ export default {
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 10px;
+  position: relative;
 }
-/* 
-.client-details-1,
-.client-details-2 {
-  color: #666666;
-  font-size: 15px;
-  font-weight: normal;
-} */
+
+.client-details-address,
+.client-details-phone,
+.client-details-email {
+  position: relative;
+}
 
 .client-notes-title {
   margin-bottom: 10px;

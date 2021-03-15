@@ -74,7 +74,17 @@ input {
   padding: 0;
   background: transparent;
   border-radius: 5px;
+  color: #7b7b7b;
 }
+
+textarea {
+  color: #7b7b7b;
+}
+
+input:focus {
+  outline: 0px !important;
+}
+
 input:required {
   box-shadow: none;
 }
@@ -83,10 +93,46 @@ input:invalid {
 }
 
 input:hover {
-  border: 1px solid #4a4aff;
+  cursor: pointer;
 }
 
-input:focus {
-  border: 1px solid #9bd2ed;
+.focus-border {
+  position: absolute;
+  left: 0px;
+  top: 30px;
+  width: 0;
+  height: 1.2px;
+  background-color: #4a4aff;
+  transition: 0.4s;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #bebebe;
+}
+
+.input-type2:focus ~ .focus-border {
+  width: 50%;
+  transition: 0.4s;
+}
+
+.focus-border-2 {
+  position: absolute;
+  left: 0px;
+  /* top: 50px; */
+  top: 22px;
+  width: 0;
+  height: 1.2px;
+  background-color: #4a4aff;
+  transition: 0.4s;
+}
+
+.input-type3:focus ~ .focus-border-2 {
+  width: 50%;
+  transition: 0.4s;
+}
+
+.input-type1:hover {
+  border: 1px solid #4a4aff;
 }
 </style>
