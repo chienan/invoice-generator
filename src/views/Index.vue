@@ -2,8 +2,9 @@
   <div class="container" ref="container">
     <div class="invoice" id="invoice">
       <div class="nav">
-        <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt />
-        <div class="main-title">TOSO INVOICE GENERATOR</div>
+        <!-- <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt /> -->
+        <div class="main-title">INVOICE GENERATOR</div>
+        <div class="main-description">calculate & get invoice easily!</div>
       </div>
 
       <div class="invoice-title section">
@@ -284,91 +285,97 @@
 
     <!--  preview invoice  -->
 
-    <div v-if="preview" id="preview-invoice" class="container-preview">
-      <div class="preview-title section">
-        {{ invoice_title.length ? invoice_title : 'INVOICE' }}
-        <!-- INVOICE TITLE: {{invoice_title}} -->
-      </div>
-
-      <div class="preview-invoice-contact section">
-        <div class="preview-invoice-from">
-          INVOICE form
-          <div class="preview-from-name preview">{{from_name}}</div>
-          <div class="preview-from-address preview">{{from_address}}</div>
-          <div class="preview-from-tel preview">{{from_tel}}</div>
-          <div class="preview-from-email preview">{{from_email}}</div>
+    <div v-if="preview" class="container-preview">
+      <div class="preview-invoice-container" ref="content" id="preview-invoice">
+        <div class="preview-title section">
+          {{ invoice_title.length ? invoice_title : 'INVOICE' }}
+          <!-- INVOICE TITLE: {{invoice_title}} -->
         </div>
 
-        <div class="preview-invoice-to">
-          INVOICE to
-          <div class="preview-to-name preview">{{to_name}}</div>
-          <div class="preview-to-address preview">{{to_address}}</div>
-          <div class="preview-to-tel preview">{{to_tel}}</div>
-          <div class="preview-to-email preview">{{to_email}}</div>
-        </div>
-      </div>
+        <div class="preview-invoice-contact section">
+          <div class="preview-invoice-from">
+            INVOICE form
+            <div class="preview-from-name preview">{{from_name}}</div>
+            <div class="preview-from-address preview">{{from_address}}</div>
+            <div class="preview-from-tel preview">{{from_tel}}</div>
+            <div class="preview-from-email preview">{{from_email}}</div>
+          </div>
 
-      <div class="preview-invoice-detail section">
-        <div class="preview-invoice-number">
-          INVOICE NO:
-          <div class="preview">{{invoice_number}}</div>
-        </div>
-        <div class="preview-invoice-date">
-          INVOICE DATE:
-          <div class="preview">{{invoice_date}}</div>
-        </div>
-      </div>
-
-      <div class="product-section section">
-        <div class="product-section-title">
-          PRODUCT
-          <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
+          <div class="preview-invoice-to">
+            INVOICE to
+            <div class="preview-to-name preview">{{to_name}}</div>
+            <div class="preview-to-address preview">{{to_address}}</div>
+            <div class="preview-to-tel preview">{{to_tel}}</div>
+            <div class="preview-to-email preview">{{to_email}}</div>
+          </div>
         </div>
 
-        <table class="product-container">
-          <thead>
-            <tr class="items-section">
-              <td class="item preview-item-description">DESCRIPTION</td>
-              <td class="item preview-item-quantity">QTY.</td>
-              <td class="item preview-item-price">PRICE</td>
-              <td class="item preview-item-discount">DISC.%</td>
-              <td class="item preview-item-tax">TAX%</td>
-              <td class="item preview-item-total">TOTAL</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="items-section-preview preview" v-for="(items, index) in items" :key="index">
-              <td class="item preview-item-description">{{items.description}}</td>
+        <div class="preview-invoice-detail section">
+          <div class="preview-invoice-number">
+            INVOICE NO:
+            <div class="preview">{{invoice_number}}</div>
+          </div>
+          <div class="preview-invoice-date">
+            INVOICE DATE:
+            <div class="preview">{{invoice_date}}</div>
+          </div>
+        </div>
 
-              <td class="item preview-item-quantity">{{items.quantity}}</td>
+        <div class="product-section section">
+          <div class="product-section-title">
+            PRODUCT
+            <div class="product-section-amount">({{indexLength ? indexLength : 0}})</div>
+          </div>
 
-              <td class="item preview-item-price">{{items.price}}</td>
+          <table class="product-container">
+            <thead>
+              <tr class="items-section">
+                <td class="item preview-item-description">DESCRIPTION</td>
+                <td class="item preview-item-quantity">QTY.</td>
+                <td class="item preview-item-price">PRICE</td>
+                <td class="item preview-item-discount">DISC.%</td>
+                <td class="item preview-item-tax">TAX%</td>
+                <td class="item preview-item-total">TOTAL</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="items-section-preview preview"
+                v-for="(items, index) in items"
+                :key="index"
+              >
+                <td class="item preview-item-description">{{items.description}}</td>
 
-              <td class="item preview-item-discount">{{items.discount}}</td>
-              <td class="item preview-item-tax">{{items.tax}}</td>
+                <td class="item preview-item-quantity">{{items.quantity}}</td>
 
-              <td class="item preview-item-total">{{items.total}}</td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr class="items-section final-section">
-              <td class="final-preview-title">DISCOUNT</td>
-              <td class="final-preview-number line">{{itemsDiscountTotal | money}}</td>
-            </tr>
-            <tr class="items-section final-section">
-              <td class="final-preview-title">TAX</td>
-              <td class="final-preview-number line">{{itemsTaxTotal | money}}</td>
-            </tr>
-            <tr class="items-section final-section">
-              <td class="final-preview-title">TOTAL</td>
-              <td class="final-preview-number">{{itemsTotal | money}}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-      <div v-if="notes.length > 0" class="client-notes section">
-        <div class="client-notes-title">NOTES FOR CLIENT</div>
-        <div class="client-notes-container">{{notes}}</div>
+                <td class="item preview-item-price">{{items.price}}</td>
+
+                <td class="item preview-item-discount">{{items.discount}}</td>
+                <td class="item preview-item-tax">{{items.tax}}</td>
+
+                <td class="item preview-item-total">{{items.total}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="items-section final-section">
+                <td class="final-preview-title">DISCOUNT</td>
+                <td class="final-preview-number line">{{itemsDiscountTotal | money}}</td>
+              </tr>
+              <tr class="items-section final-section">
+                <td class="final-preview-title">TAX</td>
+                <td class="final-preview-number line">{{itemsTaxTotal | money}}</td>
+              </tr>
+              <tr class="items-section final-section">
+                <td class="final-preview-title">TOTAL</td>
+                <td class="final-preview-number">{{itemsTotal | money}}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div v-if="notes.length > 0" class="client-notes section">
+          <div class="client-notes-title">NOTES FOR CLIENT</div>
+          <div class="client-notes-container">{{notes}}</div>
+        </div>
       </div>
     </div>
 
@@ -382,8 +389,13 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
 // import * as html2pdf from "html2pdf.js";
-import VueHtml2pdf from "vue-html2pdf";
+// import VueHtml2pdf from "vue-html2pdf";
+// eslint-disable-next-line no-unused-vars
+import { jsPDF } from "jspdf";
+// eslint-disable-next-line no-unused-vars
+import * as html2canvas from "html2canvas";
 
 export default {
   data() {
@@ -422,29 +434,14 @@ export default {
       this.$refs.title.focus();
     });
   },
-  components: {
-    // eslint-disable-next-line vue/no-unused-components
-    VueHtml2pdf
-  },
   methods: {
-    // downlad invoice as pdf
-    // download() {
-    //   const element = document.querySelector("#preview-invoice");
-    //   const opt = {
-    //     margin: 1,
-    //     filename: "invoice.pdf",
-    //     image: { type: "jpeg", quality: 1 },
-    //     html2canvas: { scale: 2 }
-    //   };
-
-    //   html2pdf()
-    //     .from(element)
-    //     .set(opt)
-    //     .save();
-    // },
-
+    //jsPDF --> 印出純html
     generateReport() {
-      this.$refs.html2Pdf.generatePdf();
+      const element = this.$refs.content.innerText;
+
+      const doc = new jsPDF();
+      doc.text(element, 10, 10);
+      doc.save("test.pdf");
     },
 
     // add product
@@ -517,24 +514,6 @@ export default {
       this.scroll = true;
       setTimeout(() => (this.scroll = false), 3500);
     }
-
-    // download(e) {
-    //   const doc = new jspdf();
-    //   const contentHtml = this.$refs.content.innerHTML;
-
-    //   const form = e.target;
-    //   const formData = new FormData(form);
-
-    //   console.log(formData);
-
-    //   doc.html(contentHtml, {
-    //     x: 15,
-    //     y: 15,
-    //     width: 200
-    //   });
-
-    //   doc.save("output.pdf");
-    // }
   },
   computed: {
     indexLength() {
@@ -558,11 +537,31 @@ export default {
 <style>
 /* main contents */
 .nav {
-  display: flex;
+  /* display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: center; */
+  color: #ffffff;
+  position: relative;
   margin-top: 15px;
   padding-bottom: 15px;
+  background-image: url(https://i.imgur.com/1Pf7qWi.jpg);
+  background-size: cover;
+  background-position: center;
+  height: 350px;
+}
+
+.main-title {
+  position: absolute;
+  bottom: 45px;
+  right: 15px;
+  font-size: 2rem;
+}
+
+.main-description {
+  position: absolute;
+  bottom: 18px;
+  right: 19px;
+  font-size: 0.9rem;
 }
 
 .main-logo {
@@ -585,7 +584,7 @@ export default {
   width: 100%;
   border: 1px solid #dcdcdc;
   max-width: 720px;
-  /* overflow-y: scroll; */
+  box-shadow: 2px 2px 50px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav,
