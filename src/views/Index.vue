@@ -390,7 +390,6 @@
 
 <script>
 import { jsPDF } from "jspdf";
-// eslint-disable-next-line no-unused-vars
 import * as html2canvas from "html2canvas";
 
 export default {
@@ -431,13 +430,26 @@ export default {
     });
   },
   methods: {
-    //jsPDF --> 印出純html
     generateReport() {
-      const element = this.$refs.content.innerText;
+      window.scrollTo(0, 0); //Before calling html2canvas, the window needs to be at the (0,0) to capture the entire DOM.
 
-      const doc = new jsPDF();
-      doc.text(element, 10, 10);
-      doc.save("test.pdf");
+      var doc = new jsPDF("p", "mm", "a4");
+      html2canvas(document.querySelector("#preview-invoice")).then(function(
+        canvas
+      ) {
+        const imgData = canvas.toDataURL("image/png");
+        // eslint-disable-next-line no-unused-vars
+        const pageHeight = 500;
+        const imgWidth = (canvas.width * 50) / 390;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        // eslint-disable-next-line no-unused-vars
+        const heightLeft = imgHeight;
+        const top = 15;
+
+        doc.addImage(imgData, "PNG", 15, top, imgWidth, imgHeight);
+
+        doc.save(Date.now() + ".pdf");
+      });
     },
 
     // add product
