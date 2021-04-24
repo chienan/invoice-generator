@@ -389,10 +389,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-// import * as html2pdf from "html2pdf.js";
-// import VueHtml2pdf from "vue-html2pdf";
-// eslint-disable-next-line no-unused-vars
 import { jsPDF } from "jspdf";
 // eslint-disable-next-line no-unused-vars
 import * as html2canvas from "html2canvas";
@@ -548,6 +544,7 @@ export default {
   background-size: cover;
   background-position: center;
   height: 350px;
+  border-radius: 8px;
 }
 
 .main-title {
