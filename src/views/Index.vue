@@ -2,7 +2,6 @@
   <div class="container" ref="container">
     <div class="invoice" id="invoice">
       <div class="nav">
-        <!-- <img src="https://i.imgur.com/FbsYH3N.png" class="main-logo" alt /> -->
         <div class="main-title">INVOICE GENERATOR</div>
         <div class="main-description">calculate & get invoice easily!</div>
       </div>
@@ -552,7 +551,7 @@ export default {
   position: relative;
   margin-top: 15px;
   padding-bottom: 15px;
-  background-image: url(https://i.imgur.com/1Pf7qWi.jpg);
+  background-image: url(https://i.imgur.com/MZZZrtR.jpg);
   background-size: cover;
   background-position: center;
   height: 350px;
